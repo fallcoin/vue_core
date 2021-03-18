@@ -1,0 +1,13 @@
+import { patch } from "./vdom/patch";
+
+export function lifecycleMixin(Vue) {
+    Vue.prototype._update = function (vnode) {
+        const vm = this;
+        patch(vm.$el, vnode);
+    }
+}
+export function mountComponent(vm, el) {
+    // 调用render方法去渲染el属性
+    // 先调用render方法创建虚拟结点，再将虚拟结点渲染到页面上
+    vm._update(vm._render());
+}
