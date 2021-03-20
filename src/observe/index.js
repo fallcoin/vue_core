@@ -1,4 +1,5 @@
 import { arrayMethods } from "./array";
+import { Dep } from "./dep";
 
 class Obsever {
     constructor(data) {
@@ -34,8 +35,11 @@ class Obsever {
 
 function defineReative(data, key, value) {
     observe(value); // 值有可能也是对象，所以对值进行观测
+    let dep = new Dep();    // 每个数据对象对应一个dep
     Object.defineProperty(data, key, {
         get() {
+            // 收集依赖
+            Dep.target && dep.addSub(Dep.target);   // 此时target指向watcher实例
             return value;
         },
         set(newValue) {
@@ -44,6 +48,8 @@ function defineReative(data, key, value) {
             }
             observe(newValue);  // 新值可能是对象，需要进行观测
             value = newValue;
+            // 数据更新时，通知dep中的watcher更新视图
+            dep.notify();
         }
     })
 }
