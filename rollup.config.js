@@ -10,7 +10,7 @@ export default {
         sourcemap: true
     },
     plugins: [
-        babel({ exclude: 'node_mpdules/**' }),
+        babel({ exclude: 'node_modules/**' }),
         serve({
             port: 3000,
             contentBase: '',
